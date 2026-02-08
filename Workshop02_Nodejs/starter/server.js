@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
         // Create a /api/time endpoint that returns current date/time as JSON
         // Uncomment and complete the code below:
         
-        /*
+        
         if (req.url === '/api/time' && req.method === 'GET') {
             const currentDateTime = new Date().toISOString();
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -34,7 +34,6 @@ const server = http.createServer((req, res) => {
             }));
             return;
         }
-        */
 
 
         // ========================================
@@ -48,22 +47,17 @@ const server = http.createServer((req, res) => {
             // Home page
             filePath = path.join(PUBLIC_DIR, 'index.html');
         } 
-        else if (rep.url === '/about') {
-            filePath = path.join(PUBLIC_DIR, 'about.html')
-        }
-        else if (rep.url === '/contact') {
-            filePath = path.join(PUBLIC_DIR, 'contact.html')
-        }
-        else {
-            res.writeHead(404, { 'Content-Type': 'text/html' });
-        res.end('<h1>404 - Page Not Found</h1><p>The page you requested does not exist.</p>');    
-        };
+        
         // TODO: Add 'else if' for '/about' -> 'about.html'
         // Example: else if (req.url === '/about') { filePath = path.join(PUBLIC_DIR, 'about.html'); }
-        
+        else if (req.url === '/about') {
+            filePath = path.join(PUBLIC_DIR, 'about.html')
+        }
         
         // TODO: Add 'else if' for '/contact' -> 'contact.html'
-        
+        else if (req.url === '/contact') {
+            filePath = path.join(PUBLIC_DIR, 'contact.html')
+        }
         
         // ========================================
         // TODO: Task 4 - Serve CSS Files
@@ -71,7 +65,7 @@ const server = http.createServer((req, res) => {
         // Handle requests for CSS files from /styles/ folder
         // Uncomment and complete the security check:
         
-        /*
+        
         else if (req.url.startsWith('/styles/')) {
             filePath = path.join(PUBLIC_DIR, req.url);
             
@@ -82,7 +76,7 @@ const server = http.createServer((req, res) => {
                 return;
             }
         }
-        */
+    
         else {
             // No route matched -> 404
             handle404(res);
@@ -116,13 +110,14 @@ const server = http.createServer((req, res) => {
                 // TODO: Send success response
                 // Use res.writeHead() to set status code 200 and Content-Type header
                 // Use res.end() to send the file content
-                
-                // res.writeHead(200, { 'Content-Type': ??? });
-                // res.end(???, 'utf-8');
+
+                res.writeHead(200, { 'Content-Type': contentType });
+                res.end(content, 'utf-8');
             }
         });
 
-    } catch (error) {
+    }
+     catch (error) {
         // Catch any unexpected errors
         handleServerError(res, error);
     }
@@ -144,7 +139,6 @@ function handle404(res) {
     // If failed: Send 404 status with plain text "404 - Page Not Found"
     
     // Example structure:
-    /*
     fs.readFile(notFoundPath, (err, content) => {
         if (err) {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -154,14 +148,13 @@ function handle404(res) {
             res.end(content, 'utf-8');
         }
     });
-    */
 }
 
 // Function to handle 500 errors (Server Error)
 function handleServerError(res, error) {
     // Step 1: Log the error to the console
     // TODO: Use console.error() to log the error
-    
+    console.error('500 - server error')
     
     // Step 2: Create the path to 500.html
     const serverErrorPath = path.join(PUBLIC_DIR, '500.html');
@@ -170,7 +163,15 @@ function handleServerError(res, error) {
     // TODO: Similar to handle404, read serverErrorPath and serve it
     // If successful: Send 500 status with the HTML content
     // If failed: Send 500 status with plain text "500 - Internal Server Error"
-    
+    fs.readFile(serverErrorPath, (err, content) => {
+        if (err) {
+            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            res.end('500 - server error');
+        } else {
+            res.writeHead(500, { 'Content-Type': 'text/html' });
+            res.end(content, 'utf-8');
+        }
+    });
 }
 
 

@@ -48,6 +48,16 @@ const server = http.createServer((req, res) => {
             // Home page
             filePath = path.join(PUBLIC_DIR, 'index.html');
         } 
+        else if (rep.url === '/about') {
+            filePath = path.join(PUBLIC_DIR, 'about.html')
+        }
+        else if (rep.url === '/contact') {
+            filePath = path.join(PUBLIC_DIR, 'contact.html')
+        }
+        else {
+            res.writeHead(404, { 'Content-Type': 'text/html' });
+        res.end('<h1>404 - Page Not Found</h1><p>The page you requested does not exist.</p>');    
+        };
         // TODO: Add 'else if' for '/about' -> 'about.html'
         // Example: else if (req.url === '/about') { filePath = path.join(PUBLIC_DIR, 'about.html'); }
         
@@ -172,12 +182,14 @@ server.listen(PORT, () => {
     // TODO: Log a message to indicate the server is running
     // Example: console.log(`Server is running on http://localhost:${PORT}`);
     
+    console.log(`Server is running on http://localhost:${PORT}`)
+
     
     // Bonus: You can also log the available routes for better user experience
-    /*
+    
     console.log('Available routes:');
     console.log('  GET /              -> index.html');
     console.log('  GET /about         -> about.html');
     console.log('  GET /contact       -> contact.html');
-    */
+    
 });
